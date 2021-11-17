@@ -3,6 +3,8 @@ import Form from './components/Form';
 import FilterButton from './components/FilterButton';
 import Todo from './components/Todo';
 import { nanoid } from 'nanoid';
+import axios from 'axios';
+
 
 function usePrevious(value) {
     const ref = useRef();
@@ -15,6 +17,13 @@ function usePrevious(value) {
 function App(props) {
     const [tasks, setTasks] = useState(props.tasks);
     const [filter, setFilter] = useState('All');
+	const [posts, setPosts] = useState([]);
+	  useEffect(() => {
+		axios
+		  .get("/hello")
+		  .then(({data})=>setPosts(data));
+		  //.then(response => console.log(response));
+	  });
     const FILTER_MAP = {
         All: () => true,
         Active: (task) => !task.completed,
@@ -98,6 +107,8 @@ function App(props) {
             >
                 {taskList}
             </ul>
+				{posts.hello}
+				{posts.goot}
         </div>
     );
 }
