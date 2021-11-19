@@ -21,8 +21,8 @@ function App(props) {
 	  useEffect(() => {
 		axios
 		  .get("/hello")
-		  .then(({data})=>setPosts(data));
-		  //.then(response => console.log(response));
+		  //.then(({data})=>setPosts(data));
+		  .then(response => console.log(response));
 	  });
     const FILTER_MAP = {
         All: () => true,
@@ -107,8 +107,6 @@ function App(props) {
             >
                 {taskList}
             </ul>
-				{posts.hello}
-				{posts.goot}
         </div>
     );
 }
