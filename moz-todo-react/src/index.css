@@ -179,11 +179,19 @@ body {
   margin-bottom: 1rem;
   text-align: center;
 }
+.input_title__lg {
+  padding: 0.5rem;
+  border: 2px solid #000;
+}
+.input_comment__lg {
+  padding: 2rem;
+  border: 2px solid #000;
+}
 .input__lg {
   padding: 2rem;
   border: 2px solid #000;
 }
-.input__lg:focus {
+.input__title,.input__comment:focus {
   border-color: #4d4d4d;
   box-shadow: inset 0 0 0 2px;
 }
@@ -289,4 +297,16 @@ body {
 }
 .c-cb > input[type="checkbox"]:checked + label::after {
   opacity: 1;
+}
+.comment {
+	color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+	padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 18px;
+    line-height: 1.42857;
+    font-family: Roboto,sans-serif;
 }
