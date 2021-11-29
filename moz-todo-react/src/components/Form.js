@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Form(props) {
     const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
-
+		// useEffect(() => {
+		//  var test = document.getElementById('test');
+		//  if()
+		// test.style.visibility = 'hidden';
+		// console.log('컴포넌트가 화면에 나타남'+test);
+		// return () => {
+		//   console.log('컴포넌트가 화면에서 사라짐');
+		// };
+		// }, []);
     function handleChange(e) {
 		if(e.target.id === "new-todo-input-title")
         	setTitle(e.target.value);
@@ -44,7 +52,7 @@ function Form(props) {
                 value={comment}
                 onChange={handleChange}
             />
-            <button type="submit" className="btn btn__primary btn__lg">
+            <button type="submit" id="test" className="btn btn__primary btn__lg">
                 Add
             </button>
         </form>

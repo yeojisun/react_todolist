@@ -50,6 +50,16 @@ app.post('/updSchedular', function (req, res) {
   })
 })
 
+app.post('/delSchedular', function (req, res) {
+  const body = req.body;
+	console.log(body);
+  db.query('delete from schedular where no=?;', [
+    body.no
+  ], function() {
+    res.redirect('/')
+  })
+})
+
 // app.get('/delSchedular', (req, res) => {
 //     db.query("SELECT * FROM schedular", (err, data) => {
 //         if(!err) res.send({ schedular : data });

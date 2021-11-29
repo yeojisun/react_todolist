@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export default function Todo(props) {
     const [isEditing, setEditing] = useState(false);
@@ -8,7 +10,7 @@ export default function Todo(props) {
     const editCommentFieldRef = useRef(null);
     const editButtonRef = useRef(null);
     const wasEditing = usePrevious(isEditing);
-
+	
     function handleTitleChange(e) {
 		const commentVal = document.getElementById(e.target.id.replace("title","")+"comment").value;
         setNewComment(commentVal);
@@ -36,6 +38,23 @@ export default function Todo(props) {
         return ref.current;
     }
 
+	function test(no){
+		console.log(no);
+		    confirmAlert({
+			  title: '삭제할거냐노',
+			  message: '선택하라노',
+			  buttons: [
+				{
+				  label: 'Yes',
+				  onClick: () => props.deleteTask(no)
+				},
+				{
+				  label: 'No'
+				}
+			  ]
+			});
+	}
+	
     const editingTemplate = (
         <form className="stack-small" onSubmit={handleSubmit}>
             <div className="form-group">
@@ -75,7 +94,7 @@ export default function Todo(props) {
         <div className="stack-small">
             <div className="c-cb">
                 <input
-                    id={props.no + "title"}
+                    id={props.no + "chkbox"}
                     type="checkbox"
                     defaultChecked={props.completed}
                     onChange={() => props.toggleTaskCompleted(props.no)}
@@ -99,7 +118,8 @@ export default function Todo(props) {
                 <button
                     type="button"
                     className="btn btn__danger"
-                    onClick={() => props.deleteTask(props.no)}
+					onClick={() => test(props.no)}
+                    //onClick={() => props.deleteTask(props.no)}
                 >
                     Delete <span className="visually-hidden">{props.title}</span>
                 </button>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Form from './components/Form';
 import FilterButton from './components/FilterButton';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Todo from './components/Todo';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
@@ -109,22 +110,65 @@ function App(props) {
         //setTasks([...tasks, newTask]);
     }
 
-    function toggleTaskCompleted(id) {
-        const updatedTasks = tasks.map((task) => {
-            // if this task has the same ID as the edited task
-            if (id === task.id) {
-                // use object spread to make a new object
-                // whose `completed` prop has been inverted
-                return { ...task, completed: !task.completed };
-            }
-            return task;
-        });
-        setTasks(updatedTasks);
+    function toggleTaskCompleted(no) {
+				// const updatedTasks = tasks.map((task) => {
+				// // if this task has the same ID as the edited task
+				// if (no === task.no) {
+				// // use object spread to make a new object
+				// // whose `completed` prop has been inverted
+				// return { ...task, completed: !task.completed };
+				// }
+				// console.log(id);
+				// console.log(task.id);
+				// return task;
+				// });
+				// setTasks(updatedTasks);
+        const updateTask = { no: no, completed: document.getElementById(no+'chkbox').checked ? 1 : 0};
+		try {
+            fetch('/updSchedular', {
+                method: 'post', //통신방법
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(updateTask),
+            }).then((res) => {
+                res.json();
+
+                callApi()
+                    .then((res) => setTasks(res.schedular))
+                    //.then(res => console.log(res.schedular))           // useEffect를 통해 callApi 함수 실행
+                    .catch((err) => console.log('this is error ' + err));
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    function deleteTask(id) {
-        const remainingTasks = tasks.filter((task) => id !== task.id);
-        setTasks(remainingTasks);
+    function deleteTask(no) {
+        //const remainingTasks = tasks.filter((task) => no !== task.no);
+        //setTasks(remainingTasks);
+		
+        const deleteTask = { no: no };
+        try {
+            fetch('/delSchedular', {
+                method: 'post', //통신방법
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(deleteTask),
+            }).then((res) => {
+                res.json();
+
+                callApi()
+                    .then((res) => setTasks(res.schedular))
+                    //.then(res => console.log(res.schedular))           // useEffect를 통해 callApi 함수 실행
+                    .catch((err) => console.log('this is error ' + err));
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     function editTask(title, comment, no) {
