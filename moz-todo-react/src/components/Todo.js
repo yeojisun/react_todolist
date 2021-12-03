@@ -10,23 +10,29 @@ export default function Todo(props) {
     const editCommentFieldRef = useRef(null);
     const editButtonRef = useRef(null);
     const wasEditing = usePrevious(isEditing);
-	
+
     function handleTitleChange(e) {
-		const commentVal = document.getElementById(e.target.id.replace("title","")+"comment").value;
+        const commentVal = document.getElementById(e.target.id.replace('title', '') + 'comment')
+            .value;
         setNewComment(commentVal);
         setNewTitle(e.target.value);
     }
     function handleCommentChange(e) {
-		const titleVal = document.getElementById(e.target.id.replace("comment","")+"title").value;
+        const titleVal = document.getElementById(e.target.id.replace('comment', '') + 'title')
+            .value;
         setNewComment(e.target.value);
         setNewTitle(titleVal);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.editTask(newTitle, newComment, props.no);
+        props.editTask(
+            newTitle.length === 0 ? props.title : newTitle,
+            newComment.length === 0 ? props.comment : newComment,
+            props.no
+        );
         setNewTitle('');
-		setNewComment('');
+        setNewComment('');
         setEditing(false);
     }
 
@@ -38,23 +44,23 @@ export default function Todo(props) {
         return ref.current;
     }
 
-	function test(no){
-		console.log(no);
-		    confirmAlert({
-			  title: '삭제할거냐노',
-			  message: '선택하라노',
-			  buttons: [
-				{
-				  label: 'Yes',
-				  onClick: () => props.deleteTask(no)
-				},
-				{
-				  label: 'No'
-				}
-			  ]
-			});
-	}
-	
+    function test(no) {
+        console.log(no);
+        confirmAlert({
+            title: '삭제할거냐노',
+            message: '선택하라노',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => props.deleteTask(no),
+                },
+                {
+                    label: 'No',
+                },
+            ],
+        });
+    }
+
     const editingTemplate = (
         <form className="stack-small" onSubmit={handleSubmit}>
             <div className="form-group">
@@ -62,7 +68,7 @@ export default function Todo(props) {
                     New name for {props.title}
                 </label>
                 <input
-                    id={props.no + "title"}
+                    id={props.no + 'title'}
                     className="todo-text"
                     type="text"
                     value={newTitle}
@@ -70,7 +76,7 @@ export default function Todo(props) {
                     ref={editTitleFieldRef}
                 />
                 <input
-                    id={props.no + "comment"}
+                    id={props.no + 'comment'}
                     className="todo-text"
                     type="text"
                     value={newComment}
@@ -94,7 +100,7 @@ export default function Todo(props) {
         <div className="stack-small">
             <div className="c-cb">
                 <input
-                    id={props.no + "chkbox"}
+                    id={props.no + 'chkbox'}
                     type="checkbox"
                     defaultChecked={props.completed}
                     onChange={() => props.toggleTaskCompleted(props.no)}
@@ -118,7 +124,7 @@ export default function Todo(props) {
                 <button
                     type="button"
                     className="btn btn__danger"
-					onClick={() => test(props.no)}
+                    onClick={() => test(props.no)}
                     //onClick={() => props.deleteTask(props.no)}
                 >
                     Delete <span className="visually-hidden">{props.title}</span>
@@ -131,10 +137,10 @@ export default function Todo(props) {
     //   console.log("side effect");
     // });
     useEffect(() => {
-		if(isEditing){
+        if (isEditing) {
             editTitleFieldRef.current.value = props.title;
             editCommentFieldRef.current.value = props.comment;
-		}
+        }
         if (!wasEditing && isEditing) {
             editTitleFieldRef.current.focus();
         }

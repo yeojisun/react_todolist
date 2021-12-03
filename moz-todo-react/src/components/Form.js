@@ -3,28 +3,26 @@ import React, { useState, useEffect } from 'react';
 function Form(props) {
     const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
-		// useEffect(() => {
-		//  var test = document.getElementById('test');
-		//  if()
-		// test.style.visibility = 'hidden';
-		// console.log('컴포넌트가 화면에 나타남'+test);
-		// return () => {
-		//   console.log('컴포넌트가 화면에서 사라짐');
-		// };
-		// }, []);
+    // useEffect(() => {
+    //  var test = document.getElementById('test');
+    //  if()
+    // test.style.visibility = 'hidden';
+    // console.log('컴포넌트가 화면에 나타남'+test);
+    // return () => {
+    //   console.log('컴포넌트가 화면에서 사라짐');
+    // };
+    // }, []);
     function handleChange(e) {
-		if(e.target.id === "new-todo-input-title")
-        	setTitle(e.target.value);
-		else if(e.target.id === "new-todo-input-comment")
-        	setComment(e.target.value);
+        if (e.target.id === 'new-todo-input-title') setTitle(e.target.value);
+        else if (e.target.id === 'new-todo-input-comment') setComment(e.target.value);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
         props.addTask(title, comment);
-		
+
         setTitle('');
-		setComment('');
+        setComment('');
     }
 
     return (

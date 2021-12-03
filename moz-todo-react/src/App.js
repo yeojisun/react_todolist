@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Form from './components/Form';
 import FilterButton from './components/FilterButton';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Todo from './components/Todo';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
-
 function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
@@ -111,20 +109,23 @@ function App(props) {
     }
 
     function toggleTaskCompleted(no) {
-				// const updatedTasks = tasks.map((task) => {
-				// // if this task has the same ID as the edited task
-				// if (no === task.no) {
-				// // use object spread to make a new object
-				// // whose `completed` prop has been inverted
-				// return { ...task, completed: !task.completed };
-				// }
-				// console.log(id);
-				// console.log(task.id);
-				// return task;
-				// });
-				// setTasks(updatedTasks);
-        const updateTask = { no: no, completed: document.getElementById(no+'chkbox').checked ? 1 : 0};
-		try {
+        // const updatedTasks = tasks.map((task) => {
+        // // if this task has the same ID as the edited task
+        // if (no === task.no) {
+        // // use object spread to make a new object
+        // // whose `completed` prop has been inverted
+        // return { ...task, completed: !task.completed };
+        // }
+        // console.log(id);
+        // console.log(task.id);
+        // return task;
+        // });
+        // setTasks(updatedTasks);
+        const updateTask = {
+            no: no,
+            completed: document.getElementById(no + 'chkbox').checked ? 1 : 0,
+        };
+        try {
             fetch('/updSchedular', {
                 method: 'post', //통신방법
                 headers: {
@@ -148,7 +149,7 @@ function App(props) {
     function deleteTask(no) {
         //const remainingTasks = tasks.filter((task) => no !== task.no);
         //setTasks(remainingTasks);
-		
+
         const deleteTask = { no: no };
         try {
             fetch('/delSchedular', {
@@ -210,21 +211,21 @@ function App(props) {
     }, [tasks.length, prevTaskLength]);
 
     return (
-        <div className="todoapp stack-large">
-            <h1>TodoMatic</h1>
-            <Form addTask={addTask} />
-            <div className="filters btn-group stack-exception">{filterList}</div>
-            <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
-                {headingText}
-            </h2>
-            <ul
-                role="list"
-                className="todo-list stack-large stack-exception"
-                aria-labelledby="list-heading"
-            >
-                {taskList}
-            </ul>
-        </div>
+            <div className="todoapp stack-large">
+                <h1>TodoMatic</h1>
+                <Form addTask={addTask} />
+                <div className="filters btn-group stack-exception">{filterList}</div>
+                <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+                    {headingText}
+                </h2>
+                <ul
+                    role="list"
+                    className="todo-list stack-large stack-exception"
+                    aria-labelledby="list-heading"
+                >
+                    {taskList}
+                </ul>
+            </div>
     );
 }
 
