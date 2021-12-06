@@ -3,7 +3,8 @@ import Form from './components/Form';
 import FilterButton from './components/FilterButton';
 import Todo from './components/Todo';
 import { nanoid } from 'nanoid';
-import axios from 'axios';
+import { List, Avatar, Button, Skeleton } from 'antd';
+import 'antd/dist/antd.css';
 function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
@@ -22,13 +23,6 @@ function App(props) {
     //const [tasks, setTasks] = useState(props.tasks);
     const [tasks, setTasks] = useState([]);
     const [filter, setFilter] = useState('All');
-    const [posts, setPosts] = useState([]);
-    // useEffect(() => {
-    // axios
-    //   .get("/hello")
-    //   .then(({schedular})=>setPosts(schedular));
-    //   //.then(response => console.log(response));
-    // });
     useEffect(() => {
         callApi()
             .then((res) => setTasks(res.schedular))
@@ -46,20 +40,19 @@ function App(props) {
         <FilterButton key={name} name={name} isPressed={name === filter} setFilter={setFilter} />
     ));
 
-    const taskList = tasks
-        .filter(FILTER_MAP[filter]) //Array.prototype.filter()
-        .map((task) => (
-            <Todo
-                no={task.no}
-                title={task.title}
-                comment={task.comment}
-                completed={task.completed}
-                key={task.no}
-                toggleTaskCompleted={toggleTaskCompleted}
-                deleteTask={deleteTask}
-                editTask={editTask}
-            />
-        ));
+    const taskList = tasks.filter(FILTER_MAP[filter]); //Array.prototype.filter()
+    // .map((task) => (
+    //     <Todo
+    //         no={task.no}
+    //         title={task.title}
+    //         comment={task.comment}
+    //         completed={task.completed}
+    //         key={task.no}
+    //         toggleTaskCompleted={toggleTaskCompleted}
+    //         deleteTask={deleteTask}
+    //         editTask={editTask}
+    //     />
+    // ));
     const tasksNoun = taskList.length > 1 ? 'tasks' : 'task';
     const headingText = `${taskList.length} ${tasksNoun} remaining`;
     const listHeadingRef = useRef(null);
@@ -211,21 +204,32 @@ function App(props) {
     }, [tasks.length, prevTaskLength]);
 
     return (
-            <div className="todoapp stack-large">
-                <h1>TodoMatic</h1>
-                <Form addTask={addTask} />
-                <div className="filters btn-group stack-exception">{filterList}</div>
-                <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
-                    {headingText}
-                </h2>
-                <ul
-                    role="list"
-                    className="todo-list stack-large stack-exception"
-                    aria-labelledby="list-heading"
-                >
-                    {taskList}
-                </ul>
-            </div>
+        <div className="todoapp stack-large">
+            <Form addTask={addTask} />
+            <div className="filters btn-group stack-exception">{filterList}</div>
+            <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+                {headingText}
+            </h2>
+            <ul
+                role="list"
+                className="todo-list stack-large stack-exception"
+                aria-labelledby="list-heading"
+            >
+                <List
+                    itemLayout="horizontal"
+                    dataSource={taskList}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                                title={<a href="https://ant.design">{item.title}</a>}
+                                description={item.comment}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </ul>
+        </div>
     );
 }
 
