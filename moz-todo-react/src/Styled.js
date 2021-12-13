@@ -161,7 +161,7 @@ body {
     }
 }
 .todoapp > * {
-    max-width: 50rem;
+    //max-width: 50rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -216,5 +216,14 @@ body {
     width: 100%;
     margin: unset auto;
 }
+
+[class*='list_title_'] .ant-list-item-meta-title {
+	text-decoration: line-through;
+}
+
+.ant-list-item-meta-content {
+	width:100%;
+}
+
 `;
 export default AppStyled;

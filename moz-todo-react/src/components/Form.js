@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Modal, Input } from 'antd';
+import FloatLabel from './FloatLabel';
 
 function Form(props) {
     const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
+    const { TextArea } = Input;
     // useEffect(() => {
     //  var test = document.getElementById('test');
     //  if()
@@ -27,11 +30,6 @@ function Form(props) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2 className="label-wrapper">
-                <label htmlFor="new-todo-input-title" className="label__lg">
-                    What needs to be done?
-                </label>
-            </h2>
             <input
                 type="text"
                 id="new-todo-input-title"
@@ -50,6 +48,18 @@ function Form(props) {
                 value={comment}
                 onChange={handleChange}
             />
+			
+                <FloatLabel label="제목" name="title">
+                    <Input
+                        style={{ padding: '16px 12px 4px 11px' }}
+                    />
+                </FloatLabel>
+                <br />
+                <FloatLabel label="내용" name="comment">
+                    <TextArea
+                        style={{ padding: '16px 12px 4px 11px' }}
+                    />
+                </FloatLabel>
             <button type="submit" id="test" className="btn btn__primary btn__lg">
                 Add
             </button>

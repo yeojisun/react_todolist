@@ -17,8 +17,8 @@ app.get('/getSchedular', (req, res) => {
 app.post('/setSchedular', function (req, res) {
     const body = req.body;
     db.query(
-        'insert into schedular (title, comment, completed, reg_date) value(?,?,?,?);',
-        [body.title, body.comment, body.completed, body.reg_date],
+        'insert into schedular (title, comment, completed) value(?,?,?);',
+        [body.title, body.comment, body.completed],
         function () {
             res.redirect('/');
         }

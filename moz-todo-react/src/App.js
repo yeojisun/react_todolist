@@ -3,7 +3,12 @@ import Form from './components/Form';
 import FilterButton from './components/FilterButton';
 import Todo from './components/Todo';
 import { nanoid } from 'nanoid';
-import axios from 'axios';
+import Styled from './Styled';
+import EditModal from './components/EditModal';
+import DelModal from './components/DelModal';
+import { List, Avatar, Button, Skeleton, Checkbox, Modal, Input, InputNumber, Spin } from 'antd';
+import 'antd/dist/antd.css';
+
 function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
@@ -20,15 +25,15 @@ async function callApi() {
 
 function App(props) {
     //const [tasks, setTasks] = useState(props.tasks);
+
     const [tasks, setTasks] = useState([]);
+    const [task, setTask] = useState({ title: '', comment: '', no: '' });
     const [filter, setFilter] = useState('All');
-    const [posts, setPosts] = useState([]);
-    // useEffect(() => {
-    // axios
-    //   .get("/hello")
-    //   .then(({schedular})=>setPosts(schedular));
-    //   //.then(response => console.log(response));
-    // });
+    const [no, setNo] = useState();
+    const [visible, setVisible] = useState(false);
+    const [d_visible, setD_visible] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         callApi()
             .then((res) => setTasks(res.schedular))
@@ -47,39 +52,59 @@ function App(props) {
     ));
 
     const taskList = tasks
-        .filter(FILTER_MAP[filter]) //Array.prototype.filter()
-        .map((task) => (
-            <Todo
-                no={task.no}
-                title={task.title}
-                comment={task.comment}
-                completed={task.completed}
-                key={task.no}
-                toggleTaskCompleted={toggleTaskCompleted}
-                deleteTask={deleteTask}
-                editTask={editTask}
-            />
-        ));
+        .filter(FILTER_MAP[filter])
+        .sort((a, b) => (a.reg_date < b.reg_date ? 1 : -1)); //Array.prototype.filter()
+    // .map((task) => (
+    //     <Todo
+    //         no={task.no}
+    //         title={task.title}
+    //         comment={task.comment}
+    //         completed={task.completed}
+    //         key={task.no}
+    //         toggleTaskCompleted={toggleTaskCompleted}
+    //         deleteTask={deleteTask}
+    //         editTask={editTask}
+    //     />
+    // ));
     const tasksNoun = taskList.length > 1 ? 'tasks' : 'task';
-    const headingText = `${taskList.length} ${tasksNoun} remaining`;
+    const headingText = `${taskList.length} ${tasksNoun} ...`;
     const listHeadingRef = useRef(null);
 
+    function toggleTaskCompleted(no) {
+        // task 업데이트 함수
+        const updateTask = {
+            no: no,
+            completed: document.getElementById(no + 'chkbox').checked ? 1 : 0,
+        };
+        try {
+            fetch('/updSchedular', {
+                method: 'post', //통신방법
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(updateTask),
+            }).then((res) => {
+                res.json();
+
+                callApi()
+                    .then((res) => {
+                        setTasks(res.schedular);
+                    })
+                    //.then(res => console.log(res.schedular))           // useEffect를 통해 callApi 함수 실행
+                    .catch((err) => console.log('this is error ' + err));
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function addTask(title, comment) {
-        var today = new Date();
-
-        var year = today.getFullYear();
-        var month = ('0' + (today.getMonth() + 1)).slice(-2);
-        var day = ('0' + today.getDate()).slice(-2);
-
-        var dateString = year + '-' + month + '-' + day;
-        //const newTask = { id: 'todo-' + nanoid(), name: name, completed: false };
-        //const newTask = { id: "id", name: name, completed: false };
         const newTask = {
             id: nanoid(),
             title: title,
             comment: comment,
             completed: false,
-            reg_date: dateString,
         };
         try {
             fetch('/setSchedular', {
@@ -100,31 +125,13 @@ function App(props) {
         } catch (error) {
             console.log(error);
         }
-        // .then((json) => {
-        //    console.log(json);
-
-        //  });
-
-        //setTasks([...tasks, newTask]);
     }
 
-    function toggleTaskCompleted(no) {
-        // const updatedTasks = tasks.map((task) => {
-        // // if this task has the same ID as the edited task
-        // if (no === task.no) {
-        // // use object spread to make a new object
-        // // whose `completed` prop has been inverted
-        // return { ...task, completed: !task.completed };
-        // }
-        // console.log(id);
-        // console.log(task.id);
-        // return task;
-        // });
-        // setTasks(updatedTasks);
-        const updateTask = {
-            no: no,
-            completed: document.getElementById(no + 'chkbox').checked ? 1 : 0,
-        };
+    function editTask(title, comment, no) {
+        const updateTask = { no: no, title: title, comment: comment };
+
+        setLoading(true);
+
         try {
             fetch('/updSchedular', {
                 method: 'post', //통신방법
@@ -137,7 +144,10 @@ function App(props) {
                 res.json();
 
                 callApi()
-                    .then((res) => setTasks(res.schedular))
+                    .then((res) => {
+                        setTasks(res.schedular);
+                        setLoading(false);
+                    })
                     //.then(res => console.log(res.schedular))           // useEffect를 통해 callApi 함수 실행
                     .catch((err) => console.log('this is error ' + err));
             });
@@ -172,60 +182,109 @@ function App(props) {
         }
     }
 
-    function editTask(title, comment, no) {
-        // const editedTaskList = tasks.map((task) => {
-        //     if (id === task.id) {
-        //         return { ...task, name: newName };
-        //     }
-        //     return task;
-        // });
-        // setTasks(editedTaskList);
+    function change_date(published_at) {
+        // date 포맷 바꾸는 함수
+        var moment = require('moment');
 
-        const updateTask = { no: no, title: title, comment: comment };
-        try {
-            fetch('/updSchedular', {
-                method: 'post', //통신방법
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify(updateTask),
-            }).then((res) => {
-                res.json();
-
-                callApi()
-                    .then((res) => setTasks(res.schedular))
-                    //.then(res => console.log(res.schedular))           // useEffect를 통해 callApi 함수 실행
-                    .catch((err) => console.log('this is error ' + err));
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        const publish_date = moment(published_at).format('YYYY년 MM월 DD일 HH시');
+        return publish_date;
     }
 
     const prevTaskLength = usePrevious(tasks.length);
+
     useEffect(() => {
         if (tasks.length - prevTaskLength === -1) {
             listHeadingRef.current.focus();
         }
     }, [tasks.length, prevTaskLength]);
 
+    function showModal(title, comment, no) {
+        setTask({ title: title, comment: comment, no: no });
+        setVisible(true);
+        console.log('@@@수정버튼클릭시_' + visible);
+    }
+
+    function showDelModal(no) {
+        setNo(no);
+        setD_visible(true);
+    }
+
+    function toggleFilter() {
+        setVisible(!visible);
+        console.log('@@@닫기버튼클릭시');
+    }
+    function d_toggleFilter() {
+        setD_visible(!d_visible);
+    }
     return (
-            <div className="todoapp stack-large">
-                <h1>TodoMatic</h1>
-                <Form addTask={addTask} />
-                <div className="filters btn-group stack-exception">{filterList}</div>
-                <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
-                    {headingText}
-                </h2>
-                <ul
-                    role="list"
-                    className="todo-list stack-large stack-exception"
-                    aria-labelledby="list-heading"
-                >
-                    {taskList}
-                </ul>
-            </div>
+        <Styled>
+            <Spin spinning={loading}>
+                <div className="todoapp stack-large">
+                    <Form addTask={addTask} />
+                    <div className="filters btn-group stack-exception">{filterList}</div>
+                    <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+                        {headingText}
+                    </h2>
+                    <List
+                        className="demo-loadmore-list"
+                        itemLayout="horizontal"
+                        dataSource={taskList}
+                        renderItem={(item) => (
+                            <List.Item
+                                actions={[
+                                    <Button
+                                        type="primary"
+                                        onClick={() => showModal(item.title, item.comment, item.no)}
+                                        disabled={item.completed}
+                                    >
+                                        수정
+                                    </Button>,
+                                    <Button type="primary" onClick={() => showDelModal(item.no)}>
+                                        삭제
+                                    </Button>,
+                                ]}
+                            >
+                                <Checkbox
+                                    id={item.no + 'chkbox'}
+                                    type="checkbox"
+                                    checked={item.completed}
+                                    onChange={() => toggleTaskCompleted(item.no)}
+                                >
+                                    <List.Item.Meta
+                                        title={item.title}
+                                        description={change_date(item.reg_date)}
+                                        className={
+                                            item.completed ? 'list_title_' + item.completed : ''
+                                        }
+                                    />
+                                    {item.comment}
+                                </Checkbox>
+                            </List.Item>
+                        )}
+                    />
+                </div>
+                <DelModal
+                    no={no}
+                    visible={d_visible}
+                    delTask={deleteTask}
+                    toggleFilter={d_toggleFilter}
+                ></DelModal>
+                <EditModal
+                    title={task.title}
+                    comment={task.comment}
+                    no={task.no}
+                    visible={visible}
+                    toggleFilter={toggleFilter}
+                    editTask={editTask}
+                ></EditModal>
+            </Spin>
+        </Styled>
+        //<ul
+        //        role="list"
+        //        className="todo-list stack-large stack-exception"
+        //       aria-labelledby="list-heading"
+        //   >
+        //   </ul>
     );
 }
 
