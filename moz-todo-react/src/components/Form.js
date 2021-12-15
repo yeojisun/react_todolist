@@ -21,6 +21,7 @@ function Form(props) {
 
     return (
         <form onSubmit={handleSubmit}>
+<<<<<<< HEAD
 			
       <form.Item
         label="제목"
@@ -70,6 +71,29 @@ function Form(props) {
           추가하기
         </Button>
       </form.Item>
+=======
+            <input
+                type="text"
+                id="new-todo-input-title"
+                className="input input_title__lg"
+                name="text"
+                autoComplete="off"
+                value={title}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                id="new-todo-input-comment"
+                className="input input_comment__lg"
+                name="text"
+                autoComplete="off"
+                value={comment}
+                onChange={handleChange}
+            />
+            <button type="submit" id="test" className="btn btn__primary btn__lg">
+                Add
+            </button>
+>>>>>>> dcb0e99731fc8de45357e8daad82c4df87654d3c
         </form>
     );
 }

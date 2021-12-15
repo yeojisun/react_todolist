@@ -32,7 +32,6 @@ function App(props) {
     const [visible, setVisible] = useState(false);
     const [d_visible, setD_visible] = useState(false);
     const [loading, setLoading] = useState(false);
-
     useEffect(() => {
         callApi()
             .then((res) => setTasks(res.schedular))
