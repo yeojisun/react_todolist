@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Input } from 'antd';
+import { Button, Modal, Input, form } from 'antd';
 import FloatLabel from './FloatLabel';
 
 function Form(props) {
     const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
     const { TextArea } = Input;
-    // useEffect(() => {
-    //  var test = document.getElementById('test');
-    //  if()
-    // test.style.visibility = 'hidden';
-    // console.log('컴포넌트가 화면에 나타남'+test);
-    // return () => {
-    //   console.log('컴포넌트가 화면에서 사라짐');
-    // };
-    // }, []);
     function handleChange(e) {
-        if (e.target.id === 'new-todo-input-title') setTitle(e.target.value);
-        else if (e.target.id === 'new-todo-input-comment') setComment(e.target.value);
+        if (e.target.id === 'input-title') setTitle(e.target.value);
+        else if (e.target.id === 'input-comment') setComment(e.target.value);
     }
 
     function handleSubmit(e) {
@@ -30,39 +21,55 @@ function Form(props) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                id="new-todo-input-title"
-                className="input input_title__lg"
-                name="text"
-                autoComplete="off"
-                value={title}
-                onChange={handleChange}
-            />
-            <input
-                type="text"
-                id="new-todo-input-comment"
-                className="input input_comment__lg"
-                name="text"
-                autoComplete="off"
-                value={comment}
-                onChange={handleChange}
-            />
 			
+      <form.Item
+        label="제목"
+        name="title"
+        rules={[
+          {
+            required: true,
+            message: 'Please input title!',
+          },
+        ]}
+      >
                 <FloatLabel label="제목" name="title">
                     <Input
+						id="input-title"
                         style={{ padding: '16px 12px 4px 11px' }}
+						value={title}
+						onChange={handleChange}
                     />
                 </FloatLabel>
-                <br />
+			</form.Item>
+      <form.Item
+        label="내용"
+        name="comment"
+        rules={[
+          {
+            required: true,
+            message: 'Please input comment!',
+          },
+        ]}
+      >
                 <FloatLabel label="내용" name="comment">
                     <TextArea
+						id="input-comment"
                         style={{ padding: '16px 12px 4px 11px' }}
+						value={comment}
+						onChange={handleChange}
                     />
                 </FloatLabel>
-            <button type="submit" id="test" className="btn btn__primary btn__lg">
-                Add
-            </button>
+			</form.Item>
+      <form.Item
+        wrapperCol={{
+          offset: 8,
+          span: 16,
+        }}
+      >
+        <Button type="primary" htmlType="submit">
+          추가하기
+        </Button>
+      </form.Item>
         </form>
     );
 }

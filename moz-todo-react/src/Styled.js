@@ -22,7 +22,7 @@ ul {
     list-style: none;
     padding: 0;
 }
-button {
+/*button {
     border: none;
     margin: 0;
     padding: 0;
@@ -35,7 +35,7 @@ button {
     -webkit-font-smoothing: inherit;
     -moz-osx-font-smoothing: inherit;
     -webkit-appearance: none;
-}
+}*/
 button::-moz-focus-inner {
     border: 0;
 }
@@ -150,7 +150,7 @@ body {
 /* END GLOBAL STYLES */
 .todoapp {
     background: #fff;
-    margin: 2rem 0 4rem 0;
+    /*margin: 2rem 0 4rem 0;*/
     padding: 1rem;
     position: relative;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2.5rem 5rem 0 rgba(0, 0, 0, 0.1);
@@ -223,6 +223,11 @@ body {
 
 .ant-list-item-meta-content {
 	width:100%;
+}
+
+.ant-form-horizontal .ant-form-item-label
+{
+	width:5%;
 }
 
 `;

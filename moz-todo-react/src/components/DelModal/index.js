@@ -38,10 +38,10 @@ function DelModal(props) {
                 onCancel={delCancel}
                 footer={[
                     <Button key="back" onClick={delCancel}>
-                        아뇨!
+                        No
                     </Button>,
                     <Button key="submit" type="primary" loading={loading} onClick={delOk}>
-                        삭제가보자고!
+                        Yes
                     </Button>,
                 ]}
             >

@@ -53,19 +53,19 @@ function EditModal(props) {
         <Styled>
             <Modal
                 visible={visible}
-                title="Title"
+                title="Edit Modal"
                 onOk={editOk}
                 onCancel={editCancel}
                 footer={[
                     <Button key="back" onClick={editCancel}>
-                        취소
+                        Cancel
                     </Button>,
                     <Button key="submit" type="primary" loading={loading} onClick={editOk}>
-                        수정
+                        Edit
                     </Button>,
                 ]}
             >
-                <FloatLabel label="제목" name="title" value={newTitle}>
+                <FloatLabel label="Title" name="title" value={newTitle}>
                     <Input
                         style={{ padding: '16px 12px 4px 11px' }}
 						value={newTitle}
@@ -73,7 +73,7 @@ function EditModal(props) {
                     />
                 </FloatLabel>
                 <br />
-                <FloatLabel label="내용" name="comment" value={newComment}>
+                <FloatLabel label="Comment" name="comment" value={newComment}>
                     <TextArea
                         style={{ padding: '16px 12px 4px 11px' }}
 						value={newComment}

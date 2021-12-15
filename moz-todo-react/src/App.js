@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Form from './components/Form';
+import AddForm from './components/AddForm';
 import FilterButton from './components/FilterButton';
-import Todo from './components/Todo';
-import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid';// 랜덤 아이디 생성
 import Styled from './Styled';
 import EditModal from './components/EditModal';
 import DelModal from './components/DelModal';
-import { List, Avatar, Button, Skeleton, Checkbox, Modal, Input, InputNumber, Spin } from 'antd';
+import { List, Button, Checkbox, Input, Spin, message, Comment, Avatar } from 'antd';
 import 'antd/dist/antd.css';
 
 function usePrevious(value) {
@@ -116,6 +115,7 @@ function App(props) {
                 body: JSON.stringify(newTask),
             }).then((res) => {
                 res.json();
+    			message.success('success!');
 
                 callApi()
                     .then((res) => setTasks(res.schedular))
@@ -220,7 +220,7 @@ function App(props) {
         <Styled>
             <Spin spinning={loading}>
                 <div className="todoapp stack-large">
-                    <Form addTask={addTask} />
+                    <AddForm addTask={addTask} />
                     <div className="filters btn-group stack-exception">{filterList}</div>
                     <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
                         {headingText}
@@ -237,13 +237,14 @@ function App(props) {
                                         onClick={() => showModal(item.title, item.comment, item.no)}
                                         disabled={item.completed}
                                     >
-                                        수정
+                                        Edit
                                     </Button>,
-                                    <Button type="primary" onClick={() => showDelModal(item.no)}>
-                                        삭제
+                                    <Button onClick={() => showDelModal(item.no)}>
+                                        Remove
                                     </Button>,
                                 ]}
                             >
+								
                                 <Checkbox
                                     id={item.no + 'chkbox'}
                                     type="checkbox"
@@ -258,6 +259,7 @@ function App(props) {
                                         }
                                     />
                                     {item.comment}
+									
                                 </Checkbox>
                             </List.Item>
                         )}
